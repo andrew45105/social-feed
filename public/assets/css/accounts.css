@@ -1,0 +1,36 @@
+.main {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+}
+.content {
+    width: 600px;
+    margin-top: 55px;
+    height: 0;
+}
+.right_sidebar {
+    margin-top: 55px;
+}
+.alert-primary {
+    color: #4F7BFF;
+    border-color: #b8daff;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding: 9px;
+}
+.vk-panel {
+    background-color: #dff5ff;
+}
+.instagram-panel {
+    background-color: #eecfff;
+}
+a.account-href {
+    text-decoration: none;
+}
+.delete-account-btn {
+    display: inline-block;
+    cursor: pointer;
+}
+.add-account {
+    margin-left: 10px;
+}

@@ -1,0 +1,22 @@
+<div class="right_sidebar" style="float: left; border: 1px solid #DBDBDB; width: 180px; margin-left: 30px;">
+    {% set route = app.request.get('_route') %}
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link{% if route == 'index' %} disabled{% endif %}" href="{{ path('index') }}">My accounts</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link{% if route == 'instagram_feed' %} disabled{% endif %}" href="{{ path('instagram_feed') }}">Instagram Feed</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link{% if route == 'vk_feed' %} disabled{% endif %}" href="{{ path('vk_feed') }}">VK Feed</a>
+        </li>
+        {% if route == 'index' %}
+            <div style="margin-top:20px">
+                <button type="button" data-action="add" data-type="instagram" title="Add to user all Instagram accounts" class="btn btn-outline-primary btn-block btn-sm btn-accounts-action">+ instagram</button>
+                <button type="button" data-action="delete" data-type="instagram" title="Delete from user all Instagram accounts" class="btn btn-outline-danger btn-block btn-sm btn-accounts-action">x instagram</button>
+                <button type="button" data-action="add" data-type="vk" title="Add to user all VK accounts" class="btn btn-outline-primary btn-block btn-sm btn-accounts-action">+ vk</button>
+                <button type="button" data-action="delete" data-type="vk" title="Delete from user all VK accounts" class="btn btn-outline-danger btn-block btn-sm btn-accounts-action">x vk</button>
+            </div>
+        {% endif %}
+    </ul>
+</div>

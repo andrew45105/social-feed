@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ACCOUNTS{% endblock %}
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link href="{{ asset('assets/css/accounts.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+{% block body %}
+
+    <div class="main row">
+        <div class="content row">
+
+            <div class="input-group mb-3 add-account">
+                <input type="text" class="form-control" id="new_account_link" placeholder="Add account (link to profile)" aria-label="Add account (link to profile)" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="add_account_button">Add</button>
+                </div>
+            </div>
+
+            {% for account in app.user.vkAccounts %}
+                <div class="alert alert-primary account-panel vk-panel" data-id="{{ account.id }}" role="alert">
+                    <a class="account-href" href="{{ account.link }}" target="_blank">{{ account.username }}</a>
+                    <div class="delete-account-btn" data-id="{{ account.id }}" data-type="vk" title="Delete">
+                        <svg title="delete" class="bi bi-trash" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.5 7.5A.5.5 0 018 8v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V8z"></path>
+                            <path fill-rule="evenodd" d="M16.5 5a1 1 0 01-1 1H15v9a2 2 0 01-2 2H7a2 2 0 01-2-2V6h-.5a1 1 0 01-1-1V4a1 1 0 011-1H8a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM6.118 6L6 6.059V15a1 1 0 001 1h6a1 1 0 001-1V6.059L13.882 6H6.118zM4.5 5V4h11v1h-11z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% for account in app.user.instagramAccounts %}
+                <div class="alert alert-primary account-panel instagram-panel" data-id="{{ account.id }}" role="alert">
+                    <a class="account-href" href="{{ account.link }}" target="_blank">{{ account.username }}</a>
+                    <div class="delete-account-btn" data-id="{{ account.id }}" data-type="instagram" title="Delete">
+                        <svg title="delete" class="bi bi-trash" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.5 7.5A.5.5 0 018 8v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V8z"></path>
+                            <path fill-rule="evenodd" d="M16.5 5a1 1 0 01-1 1H15v9a2 2 0 01-2 2H7a2 2 0 01-2-2V6h-.5a1 1 0 01-1-1V4a1 1 0 011-1H8a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM6.118 6L6 6.059V15a1 1 0 001 1h6a1 1 0 001-1V6.059L13.882 6H6.118zM4.5 5V4h11v1h-11z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% include 'partial/right_sidebar.html.twig' %}
+    </div>
+
+    <a id="to_top"></a>
+
+{% endblock %}
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script async src="//www.instagram.com/embed.js"></script>
+    <script type="application/javascript">
+        $(document).ready(function () {
+
+            // Pressing add/delete all accounts button
+            $('.btn-accounts-action').on('click', function () {
+                let action  = $(this).data('action');
+                let type    = $(this).data('type');
+                let method  = null;
+                let url     = null;
+
+                let confirmStr = (action === 'add' ? 'Add' : 'Delete') + ' all accounts ' + type + ' for current user';
+
+                if (!confirm(confirmStr)) {
+                    return false;
+                }
+
+                if (action === 'add') {
+                    method  = 'POST';
+                    url     = "{{ path('user_accounts_add') }}";
+                } else {
+                    method  = 'DELETE';
+                    url     = "{{ path('user_accounts_delete') }}";
+                }
+
+                $.ajax({
+                    url: url,
+                    type: method,
+                    dataType: "JSON",
+                    data: {
+                        'type': type,
+                    },
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+
+            // Delete account
+            $('.delete-account-btn').on('click', function () {
+                let id      = $(this).data('id');
+                let type    = $(this).data('type');
+
+                if (!confirm('Delete account?')) {
+                    return false;
+                }
+
+                $.ajax({
+                    url: "{{ path('accounts_delete') }}",
+                    type: "DELETE",
+                    dataType: "JSON",
+                    data: {
+                        'id': id,
+                        'type': type,
+                    },
+                    success: function (response) {
+                        // Delete label with account name
+                        $('.account-panel[data-id="' + id + '"]').fadeOut(300, function(){ $(this).remove();});
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+
+            // Add account
+            $('#add_account_button').on('click', function () {
+
+                let link    = $.trim($('#new_account_link').val());
+
+                let instRgx = new RegExp('https:\/\/(www.)?instagram.com\/\\w+');
+                let vkRgx   = new RegExp('https:\/\/(www.)?vk.com\/\\w+');
+
+                if (!instRgx.test(link) && !vkRgx.test(link)) {
+                    alert('Wrong link on vk or instagram profile');
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ path('accounts_create') }}",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        'link': link,
+                    },
+                    success: function (response) {
+                        if (response.error) {
+                            alert(response.error)
+                        } else {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+
+        });
+    </script>
+{% endblock %}

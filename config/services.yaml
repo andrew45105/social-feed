@@ -1,0 +1,54 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    app.instagram_base_route: '%env(INSTAGRAM_BASE_ROUTE)%'
+    app.instagram_username_route: '%env(INSTAGRAM_USERNAME_ROUTE)%'
+    app.instagram_useragent: '%env(INSTAGRAM_USERAGENT)%'
+    app.instagram_days_to_search_content: '%env(INSTAGRAM_DAYS_TO_SEARCH_CONTENT)%'
+    app.instagram_max_accounts_per_user: '%env(INSTAGRAM_MAX_ACCOUNTS_PER_USER)%'
+    app.instagram_max_posts_in_feed: '%env(INSTAGRAM_MAX_POSTS_IN_FEED)%'
+    app.instagram_cache_seconds: '%env(INSTAGRAM_CACHE_SECONDS)%'
+    app.instagram_posts_per_page: '%env(INSTAGRAM_POSTS_PER_PAGE)%'
+
+    app.vk_client_id: '%env(VK_CLIENT_ID)%'
+    app.vk_client_secret: '%env(VK_CLIENT_SECRET)%'
+    app.vk_redirect_uri: '%env(VK_REDIRECT_URI)%'
+    app.vk_api_version: '%env(VK_API_VERSION)%'
+    app.vk_auth_code_route: '%env(VK_AUTH_CODE_ROUTE)%'
+    app.vk_access_token_route: '%env(VK_ACCESS_TOKEN_ROUTE)%'
+    app.vk_photos_route: '%env(VK_PHOTOS_ROUTE)%'
+    app.vk_user_route: '%env(VK_USER_ROUTE)%'
+    app.vk_api_seconds_timeout: '%env(VK_API_SECONDS_TIMEOUT)%'
+    app.vk_days_to_search_content: '%env(VK_DAYS_TO_SEARCH_CONTENT)%'
+    app.vk_max_posts_in_feed: '%env(VK_MAX_POSTS_IN_FEED)%'
+    app.vk_cache_seconds: '%env(VK_CACHE_SECONDS)%'
+    app.vk_token_cache_seconds: '%env(VK_TOKEN_CACHE_SECONDS)%'
+    app.vk_posts_per_page: '%env(VK_POSTS_PER_PAGE)%'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $instagramBaseRoute: '%app.instagram_base_route%'
+            $instagramUsernameRoute: '%app.instagram_username_route%'
+            $instagramUserAgent: '%app.instagram_useragent%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

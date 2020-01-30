@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}INSTAGRAM POSTS{% endblock %}
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link href="{{ asset('assets/css/instagram.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+{% block body %}
+
+
+    <div class="main row">
+        <div class="posts row">
+            {% for post in posts %}
+                <blockquote
+                        class="instagram-media"
+                        data-instgrm-permalink="https://www.instagram.com/p/{{ post.shortcode }}/?utm_source=ig_embed&amp;utm_campaign=loading"
+                        data-instgrm-version="12"
+                        style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:600px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
+                </blockquote>
+            {% endfor %}
+        </div>
+        {% include 'partial/right_sidebar.html.twig' %}
+    </div>
+
+    {% include 'partial/pagination.html.twig' %}
+
+    <a id="to_top"></a>
+
+{% endblock %}
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script async src="//www.instagram.com/embed.js"></script>
+    <script type="application/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}VK POSTS{% endblock %}
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link href="{{ asset('assets/css/vk.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+{% block body %}
+
+    <div id="target"></div>
+
+    <div class="main row">
+        <div class="posts row">
+            {#<div>
+                12 Jan 00:48:57 <a href="https://vk.com/durov" target="_blank">Pavel Durov</a><br><span class="post_text">Proin ultrices nulla sed lobortis mattis. Nullam ut nisi non neque posuere tempus vitae id purus. In at fringilla nunc. Nulla facilisi. Curabitur diam neque, vulputate at porta id</span></div>
+                <div>
+                    <a href="https://sun3-13.userapi.com/c836333/v836333001/31189/8To0r3d-6iQ.jpg" target="_blank">
+                        <img src="https://sun3-13.userapi.com/c836333/v836333001/31189/8To0r3d-6iQ.jpg">
+                    </a>
+                </div>
+            </div>#}
+        </div>
+        {% include 'partial/right_sidebar.html.twig' %}
+    </div>
+
+    <div class="row justify-content-center load-more">
+        <button type="button" id="load_feed" class="btn btn-primary">Load more...</button>
+    </div>
+
+    <a id="to_top"></a>
+
+{% endblock %}
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script src="{{ asset('assets/js/loading-overlay.min.js') }}"></script>
+
+    <script type="application/javascript">
+        $(document).ready(function () {
+
+            let page = 0;
+
+            loadFeed();
+
+            $('#load_feed').on('click', function () {
+                loadFeed();
+            });
+
+            // Load photos from feed
+            function loadFeed() {
+                ++page;
+                $('#target').loadingOverlay();
+                $('.load-more').hide();
+                $.ajax({
+                    url: "{{ path('vk_feed_ajax', {'p': 'page'})|escape('js') }}".replace('page', page),
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (response) {
+                        $.each(response, function (index, post) {
+                            let text = post.text ? '<br><span class="post_text">' + post.text + '</span>' : '';
+                            $('.posts').append(
+                                '<div>' +
+                                '<div>' + post.date + ' <a href="' + post.profile + '" target="_blank">' + post.name + '</a>' + text + '</div>' +
+                                '<div><a href="' + post.link + '" target="_blank"><img src="' + post.link + '"/></a></div>' +
+                                '</div>'
+                            );
+                        })
+                        // Removing the loading overlay
+                        $('#target').loadingOverlay('remove');
+                        $('.load-more').show();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

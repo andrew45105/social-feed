@@ -100,7 +100,7 @@ class LoadAccountsCommand extends Command
                 /** @var array $account */
                 foreach ($accountsFile as $account) {
                     if (!isset($accountsDB[$account[2]][$account[0]])) {
-                        $newAccounts[$account[2]] = $account;
+                        $newAccounts[] = $account;
                     }
                 }
                 if (!$newAccounts) {

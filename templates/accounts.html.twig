@@ -127,8 +127,8 @@
 
                 let link    = $.trim($('#new_account_link').val());
 
-                let instRgx = new RegExp('https:\/\/(www.)?instagram.com\/\\w+');
-                let vkRgx   = new RegExp('https:\/\/(www.)?vk.com\/\\w+');
+                let instRgx = new RegExp('https:\/\/(www.)?instagram.com\/.+');
+                let vkRgx   = new RegExp('https:\/\/(www.)?vk.com\/.+');
 
                 if (!instRgx.test(link) && !vkRgx.test(link)) {
                     alert('Wrong link on vk or instagram profile');

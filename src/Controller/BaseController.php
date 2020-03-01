@@ -75,7 +75,7 @@ class BaseController extends AbstractController
      */
     public function getVkUserId(string $link)
     {
-        preg_match('/https:\/\/vk.com\/(\\w+)/', $link, $matches1);
+        preg_match('/https:\/\/vk.com\/(.+)/', $link, $matches1);
         $id = $matches1[1];
         preg_match('/id(\\d+)/', $id, $matches2);
         $numericId = $matches2[1] ?? null;

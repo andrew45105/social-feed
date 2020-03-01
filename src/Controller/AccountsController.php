@@ -97,9 +97,9 @@ class AccountsController extends BaseController
             $vkLink = $instagramLink = false;
             $incorrectLinkMessage = "Link $link incorrect. Type correct instagram or vk profile link";
 
-            if (preg_match('/https:\/\/(www.)?instagram.com\/\\w+/', $link)) {
+            if (preg_match('/https:\/\/(www.)?instagram.com\/.+/', $link)) {
                 $instagramLink = true;
-            } elseif (preg_match('/https:\/\/vk.com\/\\w+/', $link)) {
+            } elseif (preg_match('/https:\/\/vk.com\/.+/', $link)) {
                 $vkLink = true;
             } else {
                 throw new InvalidArgumentException($incorrectLinkMessage);

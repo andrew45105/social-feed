@@ -9,5 +9,8 @@ VK_CLIENT_ID=someid
 VK_CLIENT_SECRET=somesecret
 VK_REDIRECT_URI=http://mysite.local/vk/token/
 ```
-- `bin/console d:f:l`
+- `bin/console doctrine:database:create`
+- `bin/console doctrine:schema:update --force`
+- `bin/console doctrine:fixtures:load`
 - login at index page `login:admin`, `pass:000000`
+- add your favourite instagram/vk accounts and then check Instagram & VK Feed

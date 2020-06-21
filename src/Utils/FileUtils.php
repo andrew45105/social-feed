@@ -54,7 +54,7 @@ class FileUtils
     public static function getContents(string $fileName)
     {
         $path = __DIR__.'/../../data/' . $fileName;
-        self::checkFile($path);
+        self::createFileIfNeed($path);
         return file_get_contents($path);
     }
 
@@ -69,7 +69,7 @@ class FileUtils
     public static function putJsonData(array $data, string $fileName)
     {
         $path = __DIR__.'/../../data/' . $fileName;
-        self::checkFile($path);
+        self::createFileIfNeed($path);
         file_put_contents($path, json_encode($data, JSON_UNESCAPED_UNICODE));
     }
 
@@ -78,10 +78,10 @@ class FileUtils
      *
      * @param string $path
      */
-    public static function checkFile(string $path)
+    public static function createFileIfNeed(string $path)
     {
         if (!file_exists($path)) {
-            throw new \RuntimeException('File not found: ' . $path);
+            file_put_contents($path, '');
         }
     }
 }

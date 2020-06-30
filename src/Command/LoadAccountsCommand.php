@@ -79,6 +79,7 @@ class LoadAccountsCommand extends Command
 
         try {
             $mode = $input->getArgument('mode');
+
             if (!in_array($mode, $this->getModes())) {
                 throw new \RuntimeException('Incorrect working mode: ' .  $mode);
             }
